@@ -40,15 +40,21 @@
                 </Grid.ColumnDefinitions>
 
                 <Button 
-                    Grid.Column="0"
+                    x:Name="zipButton"
                     x:Uid="ZipButton"
+                    Grid.Column="0"
                     HorizontalAlignment="Stretch"
-                    Style="{StaticResource AccentButtonStyle}"/>
+                    IsEnabled="{x:Bind ViewModel.IsFileSelected, Mode=OneWay}"
+                    Style="{StaticResource AccentButtonStyle}"
+                    Click="zipButton_Click"/>
                 
                 <Button 
-                    Grid.Column="1"
+                    x:Name="unzipButton"
                     x:Uid="UnzipButton"
-                    HorizontalAlignment="Stretch"/>
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="{x:Bind ViewModel.IsFileSelected, Mode=OneWay}"
+                    Click="unzipButton_Click"/>
 
             </Grid>
 
@@ -68,7 +74,7 @@
                     Grid.Row="1"
                     CornerRadius="5"
                     Background="#323232">
-                    <ScrollViewer>
+                    <ScrollViewer Padding="5 5 5 0">
                         <TextBlock
                             Text="{x:Bind ViewModel.ResultRaw, Mode=OneWay}"
                             IsTextSelectionEnabled="True"
@@ -91,7 +97,7 @@
                 Grid.Row="1"
                 CornerRadius="5"
                 Background="#323232">
-                <ScrollViewer>
+                <ScrollViewer Padding="5 5 5 0">
                     <TextBlock
                         Text="{x:Bind ViewModel.SelectedFileRaw, Mode=OneWay}"
                         IsTextSelectionEnabled="True"

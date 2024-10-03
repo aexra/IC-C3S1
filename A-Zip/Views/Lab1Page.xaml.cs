@@ -15,16 +15,31 @@ public sealed partial class Lab1Page : Page
     public Lab1Page()
     {
         ViewModel = App.GetService<Lab1ViewModel>();
+
+        ViewModel.Zipper += (s) =>
+        {
+            return s;
+        };
+        ViewModel.Unzipper += (s) =>
+        {
+            return s;
+        };
+
         InitializeComponent();
     }
 
     private async void FilePicker_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        var file = await FilePickerHelper.PickSingleFile();
+        await ViewModel.SelectFile();
+    }
 
-        if (file != null)
-        {
-            ViewModel.SelectFile(file);
-        }
+    private async void zipButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        await ViewModel.Zip();
+    }
+
+    private async void unzipButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        await ViewModel.Unzip();
     }
 }
