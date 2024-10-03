@@ -41,7 +41,7 @@ public static class FilePickerHelper
         return await filePicker.PickSingleFileAsync();
     }
 
-    public static async Task<StorageFile?> CreateFile(string suggestedFileName, IDictionary<string, IList<string>>? fileTypeChoices = null)
+    public static async Task<StorageFile?> CreateFile(string suggestedFileName, IDictionary<string, IList<string>> fileTypeChoices)
     {
         var savePicker = new FileSavePicker();
         savePicker.SuggestedStartLocation = PickerLocationId.Desktop;

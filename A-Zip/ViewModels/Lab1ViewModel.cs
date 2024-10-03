@@ -51,24 +51,52 @@ public partial class Lab1ViewModel : ObservableRecipient
 
         if (file == null) return;
 
-        var stream = new FileStream(file.Path, FileMode.Open, FileAccess.Read, FileShare.None, 4096, true);
+        var stream = new FileStream(file.Path, FileMode.Open, FileAccess.Write, FileShare.None, 4096, true);
         var writer = new StreamWriter(stream);
 
+        writer.WriteLine(SelectedFile.Name);
 
+        var result = Zipper(SelectedFileRaw);
+
+        writer.Write(result);
+
+        writer.Close();
+        stream.Close();
+
+        ResultRaw = SelectedFile.Name + "\n" + result;
+        IsResultDone = true;
     }
 
     public async Task Unzip()
     {
-        if (SelectedFile == null || SelectedFile.FileType != "8z") return;
+        if (SelectedFile == null || SelectedFile.FileType != ".8z") return;
 
-        var file = await FilePickerHelper.CreateFile(SelectedFile.DisplayName + $".8z", new Dictionary<string, IList<string>>() { { "8-Zip archive", new List<string>() { ".8z" } } });
+        var sourceFileName = "";
+        var idx = 0;
+        while (true)
+        {
+            var c = SelectedFileRaw[idx];
+            if (c == '\n') break;
+            sourceFileName += c;
+            idx++;
+        }
+
+        var file = await FilePickerHelper.CreateFile(string.Join(".", sourceFileName.Split('.')[..^1]), new Dictionary<string, IList<string>>() { { "Unknown Document", new List<string>() { $".{sourceFileName.Split('.').Last()[..^1]}" } } });
 
         if (file == null) return;
 
-        var stream = new FileStream(file.Path, FileMode.Open, FileAccess.Read, FileShare.None, 4096, true);
+        var stream = new FileStream(file.Path, FileMode.Open, FileAccess.Write, FileShare.None, 4096, true);
         var writer = new StreamWriter(stream);
 
+        var result = Unzipper(SelectedFileRaw[(sourceFileName.Length + 1)..]);
 
+        writer.Write(result);
+
+        writer.Close();
+        stream.Close();
+
+        ResultRaw = result;
+        IsResultDone = true;
     }
 
     public Lab1ViewModel()
