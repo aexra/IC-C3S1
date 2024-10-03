@@ -8,7 +8,7 @@
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls">
 
-    <Grid ColumnSpacing="10">
+    <Grid ColumnSpacing="10" Margin="0 0 0 20">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
@@ -52,7 +52,8 @@
 
             </Grid>
 
-            <Grid Grid.Row="2" ColumnSpacing="10">
+            <Grid Grid.Row="2" RowSpacing="10" 
+                Visibility="{x:Bind ViewModel.IsResultDone, Mode=OneWay}">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -63,9 +64,16 @@
                     Grid.Row="0"
                     x:Uid="RawOutputTextBlock"/>
 
-                <TextBlock
+                <Border
                     Grid.Row="1"
-                    Text="{x:Bind ViewModel.SelectedFileRaw, Mode=OneWay}"/>
+                    CornerRadius="5"
+                    Background="#323232">
+                    <ScrollViewer>
+                        <TextBlock
+                            Text="{x:Bind ViewModel.ResultRaw, Mode=OneWay}"
+                            IsTextSelectionEnabled="True"/>
+                    </ScrollViewer>
+                </Border>
 
             </Grid>
 

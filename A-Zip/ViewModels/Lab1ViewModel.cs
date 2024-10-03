@@ -11,6 +11,12 @@ public partial class Lab1ViewModel : ObservableRecipient
     [ObservableProperty]
     private string _selectedFileRaw;
 
+    [ObservableProperty]
+    private string _resultRaw;
+
+    [ObservableProperty]
+    private bool _isResultDone;
+
     public void SelectFile(StorageFile file)
     {
         SelectedFile = file;
@@ -26,5 +32,6 @@ public partial class Lab1ViewModel : ObservableRecipient
 
     public Lab1ViewModel()
     {
+        IsResultDone = false;
     }
 }

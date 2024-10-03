@@ -24,7 +24,7 @@ public sealed partial class Lab1Page : Page
 
         if (file != null)
         {
-            ViewModel.SelectedFile = file;
+            ViewModel.SelectFile(file);
         }
     }
 }
