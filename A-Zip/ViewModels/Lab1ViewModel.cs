@@ -16,6 +16,9 @@ public partial class Lab1ViewModel : ObservableRecipient
 
     [ObservableProperty]
     private bool _isResultDone;
+    
+    [ObservableProperty]
+    private bool _isFileSelected;
 
     public void SelectFile(StorageFile file)
     {
@@ -28,10 +31,13 @@ public partial class Lab1ViewModel : ObservableRecipient
 
         reader.Close();
         stream.Close();
+
+        IsFileSelected = true;
     }
 
     public Lab1ViewModel()
     {
         IsResultDone = false;
+        IsFileSelected = false;
     }
 }
