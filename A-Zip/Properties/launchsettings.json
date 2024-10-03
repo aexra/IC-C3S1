@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "A-Zip (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "A-Zip (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}
