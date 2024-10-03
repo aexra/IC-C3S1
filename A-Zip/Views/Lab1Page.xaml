@@ -26,9 +26,10 @@
             <controls:SettingsCard
                 Grid.Row="0"
                 x:Uid="SelectedManipulatingFile"
-                Description="{x:Bind ViewModel.SelectedFile.Path}"
+                Description="{x:Bind ViewModel.SelectedFile.Path, Mode=OneWay}"
                 HeaderIcon="{ui:FontIcon Glyph=&#xE8E5;}"
                 IsClickEnabled="True"
+                Click="FilePicker_Click"
                 />
 
             <Grid Grid.Row="1" ColumnSpacing="10">
@@ -48,6 +49,23 @@
                     Grid.Column="1"
                     x:Uid="UnzipButton"
                     HorizontalAlignment="Stretch"/>
+
+            </Grid>
+
+            <Grid Grid.Row="2" ColumnSpacing="10">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    x:Uid="RawOutputTextBlock"/>
+
+                <TextBlock
+                    Grid.Row="1"
+                    Text="{x:Bind ViewModel.SelectedFileRaw, Mode=OneWay}"/>
 
             </Grid>
 

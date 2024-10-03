@@ -1,4 +1,5 @@
-﻿using A_Zip.ViewModels;
+﻿using A_Zip.Helpers;
+using A_Zip.ViewModels;
 
 using Microsoft.UI.Xaml.Controls;
 
@@ -15,5 +16,15 @@ public sealed partial class Lab1Page : Page
     {
         ViewModel = App.GetService<Lab1ViewModel>();
         InitializeComponent();
+    }
+
+    private async void FilePicker_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        var file = await FilePickerHelper.PickSingleFile();
+
+        if (file != null)
+        {
+            ViewModel.SelectedFile = file;
+        }
     }
 }
