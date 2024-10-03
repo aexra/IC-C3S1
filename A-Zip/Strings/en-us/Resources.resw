@@ -165,4 +165,19 @@
   <data name="SettingsPage_PrivacyTermsLink.NavigateUri" xml:space="preserve">
     <value>https://YourPrivacyUrlGoesHere/</value>
   </data>
+  <data name="RawInputTextBlock.Content" xml:space="preserve">
+    <value>Сырой текст ввода</value>
+  </data>
+  <data name="RawOutputTextBlock.Content" xml:space="preserve">
+    <value>Сырой текст вывода</value>
+  </data>
+  <data name="SelectedManipulatingFile.Header" xml:space="preserve">
+    <value>Файл для манипуляций</value>
+  </data>
+  <data name="UnzipButton.Content" xml:space="preserve">
+    <value>Отменить сжатие</value>
+  </data>
+  <data name="ZipButton.Content" xml:space="preserve">
+    <value>Применить сжатие</value>
+  </data>
 </root>
