@@ -21,6 +21,12 @@ public partial class Lab1ViewModel : ObservableRecipient
     [ObservableProperty]
     private bool _isFileSelected;
 
+    [ObservableProperty]
+    private bool _isTextSelected;
+
+    [ObservableProperty]
+    private bool _isZipSelected;
+
     public Func<string, string> Zipper;
     public Func<string, string> Unzipper;
 
@@ -41,6 +47,12 @@ public partial class Lab1ViewModel : ObservableRecipient
         stream.Close();
 
         IsFileSelected = true;
+
+        if (file.FileType == ".8z") IsZipSelected = true;
+        else IsZipSelected = false;
+
+        if (file.FileType == ".txt") IsTextSelected = true;
+        else IsTextSelected = false;
     }
 
     public async Task Zip()

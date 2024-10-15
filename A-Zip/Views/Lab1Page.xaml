@@ -44,7 +44,7 @@
                     x:Uid="ZipButton"
                     Grid.Column="0"
                     HorizontalAlignment="Stretch"
-                    IsEnabled="{x:Bind ViewModel.IsFileSelected, Mode=OneWay}"
+                    IsEnabled="{x:Bind ViewModel.IsTextSelected, Mode=OneWay}"
                     Style="{StaticResource AccentButtonStyle}"
                     Click="zipButton_Click"/>
                 
@@ -53,7 +53,7 @@
                     x:Uid="UnzipButton"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
-                    IsEnabled="{x:Bind ViewModel.IsFileSelected, Mode=OneWay}"
+                    IsEnabled="{x:Bind ViewModel.IsZipSelected, Mode=OneWay}"
                     Click="unzipButton_Click"/>
 
             </Grid>
