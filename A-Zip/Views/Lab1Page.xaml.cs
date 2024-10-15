@@ -1,4 +1,5 @@
 ﻿using A_Zip.ViewModels;
+using Aexra.Codebase.Algorithms.Coding;
 using Microsoft.UI.Xaml.Controls;
 
 namespace A_Zip.Views;
@@ -16,9 +17,10 @@ public sealed partial class Lab1Page : Page
 
         ViewModel.Zipper += (s) =>
         {
-            
+            var (huff, huffTable) = Huffman.Encode(s);
 
-            return s;
+            var (data, ws, bs) = LZSS.Encode(huff, 8, 5, (l) => System.Diagnostics.Debug.WriteLine(l));
+            return string.Join("|", data.Select(x => x.coded ? $"(1<{x.start},{x.length}>)" : $"(0<{x.symbol}>)"));
         };
         ViewModel.Unzipper += (s) =>
         {
