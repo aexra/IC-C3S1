@@ -1,4 +1,6 @@
-﻿using A_Zip.Contracts.Services;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using A_Zip.Contracts.Services;
 using A_Zip.Helpers;
 using A_Zip.ViewModels;
 
@@ -12,8 +14,24 @@ using Windows.System;
 namespace A_Zip.Views;
 
 // TODO: Update NavigationViewItem titles and icons in ShellPage.xaml.
-public sealed partial class ShellPage : Page
+public sealed partial class ShellPage : Page, INotifyPropertyChanged
 {
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    public static ShellPage Instance
+    {
+        get; private set;
+    }
+
+    private string NotificationTitle
+    {
+        get; set;
+    }
+    private string NotificationSubtitle
+    {
+        get; set;
+    }
+
     public ShellViewModel ViewModel
     {
         get;
@@ -34,6 +52,8 @@ public sealed partial class ShellPage : Page
         App.MainWindow.SetTitleBar(AppTitleBar);
         App.MainWindow.Activated += MainWindow_Activated;
         AppTitleBarText.Text = "AppDisplayName".GetLocalized();
+
+        Instance = this;
     }
 
     private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
@@ -81,5 +101,21 @@ public sealed partial class ShellPage : Page
         var result = navigationService.GoBack();
 
         args.Handled = result;
+    }
+
+    private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    public void Notify(string title, string description = "")
+    {
+        NotificationTitle = title;
+        NotificationSubtitle = description;
+
+        NotifyPropertyChanged(nameof(NotificationTitle));
+        NotifyPropertyChanged(nameof(NotificationSubtitle));
+
+        Notification.IsOpen = true;
     }
 }

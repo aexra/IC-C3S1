@@ -20,6 +20,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -36,7 +37,8 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
 
                 <Button 
@@ -47,18 +49,28 @@
                     IsEnabled="{x:Bind ViewModel.IsTextSelected, Mode=OneWay}"
                     Style="{StaticResource AccentButtonStyle}"
                     Click="zipButton_Click"/>
-                
-                <Button 
-                    x:Name="unzipButton"
-                    x:Uid="UnzipButton"
+
+                <TextBox
+                    x:Name="windowSizeBox"
                     Grid.Column="1"
-                    HorizontalAlignment="Stretch"
-                    IsEnabled="{x:Bind ViewModel.IsZipSelected, Mode=OneWay}"
-                    Click="unzipButton_Click"/>
+                    PlaceholderText="Размер окна"/>
+
+                <TextBox
+                    x:Name="bufferSizeBox"
+                    Grid.Column="2"
+                    PlaceholderText="Размер буфера"/>
 
             </Grid>
 
-            <Grid Grid.Row="2" RowSpacing="10" 
+            <Button 
+                x:Name="unzipButton"
+                x:Uid="UnzipButton"
+                Grid.Row="2"
+                HorizontalAlignment="Stretch"
+                IsEnabled="{x:Bind ViewModel.IsZipSelected, Mode=OneWay}"
+                Click="unzipButton_Click"/>
+            
+            <Grid Grid.Row="3" RowSpacing="10" 
                 Visibility="{x:Bind ViewModel.IsResultDone, Mode=OneWay}">
 
                 <Grid.RowDefinitions>

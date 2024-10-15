@@ -27,7 +27,7 @@ public partial class Lab1ViewModel : ObservableRecipient
     [ObservableProperty]
     private bool _isZipSelected;
 
-    public Func<string, string> Zipper;
+    public Func<string, int, int, string> Zipper;
     public Func<string, string> Unzipper;
 
     public async Task SelectFile()
@@ -55,7 +55,7 @@ public partial class Lab1ViewModel : ObservableRecipient
         else IsTextSelected = false;
     }
 
-    public async Task Zip()
+    public async Task Zip(int ws, int bs)
     {
         if (SelectedFile == null) return;
 
@@ -68,7 +68,7 @@ public partial class Lab1ViewModel : ObservableRecipient
 
         writer.WriteLine(SelectedFile.Name);
 
-        var result = Zipper(SelectedFileRaw);
+        var result = Zipper(SelectedFileRaw, ws, bs);
 
         writer.Write(result);
 

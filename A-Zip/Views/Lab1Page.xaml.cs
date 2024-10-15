@@ -19,10 +19,10 @@ public sealed partial class Lab1Page : Page
     {
         ViewModel = App.GetService<Lab1ViewModel>();
 
-        ViewModel.Zipper += (s) =>
+        ViewModel.Zipper += (s, ws, bs) =>
         {
             var (huff, huffTable) = Huffman.Encode(s);
-            var (lzssList, ws, bs) = LZSS.Encode(huff, 8, 5, (l) => System.Diagnostics.Debug.WriteLine(l));
+            var (lzssList, _, _) = LZSS.Encode(huff, ws, bs, (l) => System.Diagnostics.Debug.WriteLine(l));
 
             var shuffData = string.Join("|", huffTable.Select(kv => $"({kv.Key}||{kv.Value})"));
             var slzss = string.Join("|", lzssList.Select(x => x.coded ? $"(1<{x.start},{x.length}>)" : $"(0<{x.symbol}>)"));
@@ -71,7 +71,16 @@ public sealed partial class Lab1Page : Page
 
     private async void zipButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        await ViewModel.Zip();
+        var a = int.TryParse(windowSizeBox.Text, out var ws);
+        var b = int.TryParse(bufferSizeBox.Text, out var bs);
+
+        if (!a || !b)
+        {
+            ShellPage.Instance.Notify("Ошибка ввода", "Размеры окна и буфера должны быть целыми числами");
+            return;
+        }
+
+        await ViewModel.Zip(ws, bs);
     }
 
     private async void unzipButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
