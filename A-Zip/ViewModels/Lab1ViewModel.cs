@@ -1,4 +1,5 @@
 ﻿using A_Zip.Helpers;
+using A_Zip.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Windows.Storage;
 
@@ -42,6 +43,8 @@ public partial class Lab1ViewModel : ObservableRecipient
         var reader = new StreamReader(stream);
 
         SelectedFileRaw = reader.ReadToEnd();
+
+        //ShellPage.Instance.Notify(SelectedFileRaw.Length.ToString());
 
         reader.Close();
         stream.Close();
