@@ -1,0 +1,3 @@
+[submodule "Aexra.Codebase"]
+	path = Aexra.Codebase
+	url = https://github.com/aexra/Aexra.Codebase.git
