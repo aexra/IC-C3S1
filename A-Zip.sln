@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A-Zip", "A-Zip\A-Zip.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A-Zip.Core", "A-Zip.Core\A-Zip.Core.csproj", "{1D16D46B-4CAD-43B1-AF56-4AB9A2A000FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aexra.Codebase", "..\..\Users\Никита\source\repos\Aexra.Codebase\Aexra.Codebase\Aexra.Codebase.csproj", "{2262DDA0-7B6E-4EF6-B82A-B0C21E2C1342}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aexra.Codebase", "Aexra.Codebase\Aexra.Codebase\Aexra.Codebase.csproj", "{2262DDA0-7B6E-4EF6-B82A-B0C21E2C1342}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
