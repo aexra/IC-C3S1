@@ -27,15 +27,15 @@ public sealed partial class Lab1Page : Page
             var shuffData = string.Join("|", huffTable.Select(kv => $"({kv.Key}||{kv.Value})"));
             var slzss = string.Join("|", lzssList.Select(x => x.coded ? $"(1<{x.start},{x.length}>)" : $"(0<{x.symbol}>)"));
 
-            return $"{shuffData}\n{ws}\n{bs}\n{slzss}";
+            return $"{shuffData}\n{ws},{bs}\n{slzss}";
         };
         ViewModel.Unzipper += (s) =>
         {
             var shuffData = s.Split("\n")[0];
-            var slzss = string.Join("\n", s.Split("\n")[3..]);
+            var slzss = string.Join("\n", s.Split("\n")[2..]);
             var huffTable = new Dictionary<char, string>();
-            var ws = int.Parse(s.Split("\n")[1]);
-            var bs = int.Parse(s.Split("\n")[2]);
+            var ws = int.Parse(s.Split("\n")[1].Split(",")[0]);
+            var bs = int.Parse(s.Split("\n")[1].Split(",")[1]);
             var lzssList = new List<(bool coded, int start, int length, char symbol)>();
 
             foreach (Match match in Regex.Matches(shuffData, huffPattern))
