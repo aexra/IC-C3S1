@@ -25,21 +25,24 @@ public sealed partial class Lab1Page : Page
             var (lzssList, ws, bs) = LZSS.Encode(huff, 8, 5, (l) => System.Diagnostics.Debug.WriteLine(l));
 
             var shuffData = string.Join("|", huffTable.Select(kv => $"({kv.Key}||{kv.Value})"));
-            var lzss = string.Join("|", lzssList.Select(x => x.coded ? $"(1<{x.start},{x.length}>)" : $"(0<{x.symbol}>)"));
+            var slzss = string.Join("|", lzssList.Select(x => x.coded ? $"(1<{x.start},{x.length}>)" : $"(0<{x.symbol}>)"));
 
-            return shuffData + "\n" + lzss;
+            return $"{shuffData}\n{ws}\n{bs}\n{slzss}";
         };
         ViewModel.Unzipper += (s) =>
         {
             var shuffData = s.Split("\n")[0];
-            var huffTable = new Dictionary<string, string>();
+            var slzss = string.Join("\n", s.Split("\n")[3..]);
+            var huffTable = new Dictionary<char, string>();
+            var ws = int.Parse(s.Split("\n")[1]);
+            var bs = int.Parse(s.Split("\n")[2]);
             var lzssList = new List<(bool coded, int start, int length, char symbol)>();
 
             foreach (Match match in Regex.Matches(shuffData, huffPattern))
             {
-                huffTable.Add(match.Groups[1].Value.ToString(), match.Groups[2].Value.ToString());
+                huffTable.Add(char.Parse(match.Groups[1].Value.ToString()), match.Groups[2].Value.ToString());
             }
-            foreach (Match match in Regex.Matches(string.Join("\n", s.Split("\n")[1..]), lzssPattern))
+            foreach (Match match in Regex.Matches(slzss, lzssPattern))
             {
                 var g = match.Groups[1].Value;
                 var splittedVals = g[2..^1].Split(',');
@@ -51,6 +54,9 @@ public sealed partial class Lab1Page : Page
 
                 lzssList.Add((coded, start, length, symbol));
             }
+
+            var huff = LZSS.Decode(lzssList, ws, bs);
+            var output = Huffman.Decode(huff, huffTable);
 
             return string.Join(",", lzssList.Select(x => $"{x.coded}:{x.start}:{x.length}:{x.symbol}"));
         };
