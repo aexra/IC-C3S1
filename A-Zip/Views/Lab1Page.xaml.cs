@@ -1,6 +1,4 @@
-﻿using A_Zip.Helpers;
-using A_Zip.ViewModels;
-
+﻿using A_Zip.ViewModels;
 using Microsoft.UI.Xaml.Controls;
 
 namespace A_Zip.Views;
@@ -18,6 +16,8 @@ public sealed partial class Lab1Page : Page
 
         ViewModel.Zipper += (s) =>
         {
+            
+
             return s;
         };
         ViewModel.Unzipper += (s) =>
