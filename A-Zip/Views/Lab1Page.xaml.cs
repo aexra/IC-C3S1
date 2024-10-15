@@ -55,10 +55,10 @@ public sealed partial class Lab1Page : Page
                 lzssList.Add((coded, start, length, symbol));
             }
 
-            var huff = LZSS.Decode(lzssList, ws, bs);
+            var huff = LZSS.Decode(lzssList, ws, bs, (l) => System.Diagnostics.Debug.WriteLine(l));
             var output = Huffman.Decode(huff, huffTable);
 
-            return string.Join(",", lzssList.Select(x => $"{x.coded}:{x.start}:{x.length}:{x.symbol}"));
+            return output;
         };
 
         InitializeComponent();
