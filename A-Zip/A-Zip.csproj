@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Users\Никита\source\repos\Aexra.Codebase\Aexra.Codebase\Aexra.Codebase.csproj" />
     <ProjectReference Include="..\A-Zip.Core\A-Zip.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
