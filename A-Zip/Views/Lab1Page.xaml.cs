@@ -22,7 +22,7 @@ public sealed partial class Lab1Page : Page
         ViewModel.Zipper += (s, ws, bs) =>
         {
             var (huff, huffTable) = Huffman.Encode(s);
-            var (lzssList, _, _) = LZSS.Encode(huff, ws, bs, (l) => System.Diagnostics.Debug.WriteLine(l));
+            var (lzssList, _, _) = LZSS.Encode(huff, ws, bs, null);
 
             var shuffData = string.Join("|", huffTable.Select(kv => $"({kv.Key}||{kv.Value})"));
             var slzss = string.Join("|", lzssList.Select(x => x.coded ? $"(1<{x.start},{x.length}>)" : $"(0<{x.symbol}>)"));
@@ -31,11 +31,11 @@ public sealed partial class Lab1Page : Page
         };
         ViewModel.Unzipper += (s) =>
         {
-            var shuffData = s.Split("\n")[0];
-            var slzss = string.Join("\n", s.Split("\n")[2..]);
+            var shuffData = s.Split("\n")[0..3];
+            var slzss = string.Join("\n", s.Split("\n")[3..]);
             var huffTable = new Dictionary<char, string>();
-            var ws = int.Parse(s.Split("\n")[1].Split(",")[0]);
-            var bs = int.Parse(s.Split("\n")[1].Split(",")[1]);
+            var ws = int.Parse(s.Split("\n")[4].Split(",")[0]);
+            var bs = int.Parse(s.Split("\n")[4].Split(",")[1]);
             var lzssList = new List<(bool coded, int start, int length, char symbol)>();
 
             foreach (Match match in Regex.Matches(shuffData, huffPattern))
@@ -55,7 +55,7 @@ public sealed partial class Lab1Page : Page
                 lzssList.Add((coded, start, length, symbol));
             }
 
-            var huff = LZSS.Decode(lzssList, ws, bs, (l) => System.Diagnostics.Debug.WriteLine(l));
+            var huff = LZSS.Decode(lzssList, ws, bs, null);
             var output = Huffman.Decode(huff, huffTable);
 
             return output;
