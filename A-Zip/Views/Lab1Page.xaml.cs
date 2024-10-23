@@ -24,41 +24,27 @@ public sealed partial class Lab1Page : Page
             var (huff, huffTable) = Huffman.Encode(s);
             var (lzssList, _, _) = LZSS.Encode(huff, ws, bs, null);
 
-            var shuffData = string.Join("|", huffTable.Select(kv => $"({kv.Key}||{kv.Value})"));
-            var slzss = string.Join("|", lzssList.Select(x => x.coded ? $"(1<{x.start},{x.length}>)" : $"(0<{x.symbol}>)"));
+            var shuffData = string.Join("", huffTable.Select(kv => $"({kv.Key}{kv.Value})"));
+            var slzss = string.Join("", lzssList.Select(x => x.coded ? $"{x.start},{x.length};" : $"{x.symbol};"));
 
-            return $"{shuffData}\n{ws},{bs}\n{slzss}";
+            return $"{shuffData}%s{ws};{bs};{slzss}"[..^1];
         };
         ViewModel.Unzipper += (s) =>
         {
-            var shuffData = s.Split("\n")[0..3];
-            var slzss = string.Join("\n", s.Split("\n")[3..]);
-            var huffTable = new Dictionary<char, string>();
-            var ws = int.Parse(s.Split("\n")[4].Split(",")[0]);
-            var bs = int.Parse(s.Split("\n")[4].Split(",")[1]);
-            var lzssList = new List<(bool coded, int start, int length, char symbol)>();
+            var parts = s.Split("%s");
 
-            foreach (Match match in Regex.Matches(shuffData, huffPattern))
-            {
-                huffTable.Add(char.Parse(match.Groups[1].Value.ToString()), match.Groups[2].Value.ToString());
-            }
-            foreach (Match match in Regex.Matches(slzss, lzssPattern))
-            {
-                var g = match.Groups[1].Value;
-                var splittedVals = g[2..^1].Split(',');
+            var huffFrequencies = parts[0];
+            var lzssData = parts[1];
 
-                var coded = g[0] == '1' ? true : false;
-                var start = coded ? int.Parse(splittedVals[0]) : 0;
-                var length = coded ? int.Parse(splittedVals[1]) : -1;
-                var symbol = coded ? '0' : char.Parse(splittedVals[0]);
+            var size = lzssData.Split(";")[..2];
+            var lzss = lzssData[2..];
 
-                lzssList.Add((coded, start, length, symbol));
-            }
+            return "";
 
-            var huff = LZSS.Decode(lzssList, ws, bs, null);
-            var output = Huffman.Decode(huff, huffTable);
+            //var huff = LZSS.Decode(lzssList, ws, bs, null);
+            //var output = Huffman.Decode(huff, huffTable);
 
-            return output;
+            //return output;
         };
 
         InitializeComponent();
