@@ -52,11 +52,13 @@
 
                 <TextBox
                     x:Name="windowSizeBox"
+                    Text="{x:Bind ViewModel.WindowSize, Mode=TwoWay}"
                     Grid.Column="1"
                     PlaceholderText="Размер окна"/>
 
                 <TextBox
                     x:Name="bufferSizeBox"
+                    Text="{x:Bind ViewModel.BufferSize, Mode=TwoWay}"
                     Grid.Column="2"
                     PlaceholderText="Размер буфера"/>
 
