@@ -7,8 +7,6 @@ namespace A_Zip.Views;
 
 public sealed partial class Lab1Page : Page
 {
-    private const string huffPattern = @"\((.\d+)\)";
-
     public Lab1ViewModel ViewModel
     {
         get;
@@ -28,16 +26,19 @@ public sealed partial class Lab1Page : Page
 
             System.Diagnostics.Debug.WriteLine(huff);
 
-            var huffData = string.Join("", huffTable.Select(kv => $"({kv.Key}{kv.Value})"));
+            var huffData = string.Join("%h", huffTable.Select(kv => $"{kv.Key}{kv.Value}"));
             var lzss = string.Join("", lzssList.Select(x => x.coded ? $"{x.start},{x.length};" : $"{x.symbol};"));
 
-            return $"{huffData}%s{ws};{bs};{lzss}"[..^1];
+            return $"{ViewModel.SelectedFileRaw.Length}%h{huffData}%s{ws};{bs};{lzss}"[..^1];
         };
         ViewModel.Unzipper += (s) =>
         {
             var parts = s.Split("%s");
 
-            var huffFrequencies = parts[0];
+            var sMsgSize = parts[0].Split("%h").First();
+            var msgSize = int.Parse(sMsgSize);
+
+            var huffFrequencies = parts[0].Split("%h")[1..];
 
             var lzssData = parts[1];
             var lzssParts = lzssData.Split(";");
@@ -48,16 +49,23 @@ public sealed partial class Lab1Page : Page
             // BUILDING TABLES
 
             var frequencyTable = new Dictionary<char, int>();
-            foreach (Match match in Regex.Matches(huffFrequencies, huffPattern))
-            {
-                var part = match.Groups[1].Value;
-                var symbol = part[0];
-                var frequency = int.Parse(part[1..]);
 
-                frequencyTable.Add(symbol, frequency);
+            foreach (var huffPair in huffFrequencies)
+            {
+                var symbol = huffPair[0];
+                var frequencie = int.Parse(huffPair[1..]);
+
+                frequencyTable.Add(symbol, frequencie);
             }
 
-            //System.Diagnostics.Debug.WriteLine(string.Join("\n", frequencyTable.Select(kv => $"{kv.Key} for {kv.Value}")));
+            //foreach (Match match in Regex.Matches(huffFrequencies, huffPattern))
+            //{
+            //    var part = match.Groups[1].Value;
+            //    var symbol = part[0];
+            //    var frequency = int.Parse(part[1..]);
+
+            //    frequencyTable.Add(symbol, frequency);
+            //}
 
             var lzssList = new List<(bool coded, int start, int length, char symbol)>();
             foreach (var code in lzss)
@@ -80,7 +88,7 @@ public sealed partial class Lab1Page : Page
 
             System.Diagnostics.Debug.WriteLine(huff);
 
-            var output = Huffman.Decode(huff, frequencyTable, s => System.Diagnostics.Debug.WriteLine(s));
+            var output = Huffman.Decode(huff, msgSize, frequencyTable, s => System.Diagnostics.Debug.WriteLine(s));
 
             return output;
         };
