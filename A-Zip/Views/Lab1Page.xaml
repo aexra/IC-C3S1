@@ -96,6 +96,10 @@
                     </ScrollViewer>
                 </Border>
 
+                <ProgressRing
+                    Grid.Row="1"
+                    IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}"/>
+
             </Grid>
 
         </Grid>

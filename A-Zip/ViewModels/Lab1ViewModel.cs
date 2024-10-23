@@ -8,6 +8,9 @@ namespace A_Zip.ViewModels;
 public partial class Lab1ViewModel : ObservableRecipient
 {
     [ObservableProperty]
+    private bool _isLoading;
+
+    [ObservableProperty]
     private StorageFile _selectedFile;
 
     [ObservableProperty]
@@ -39,6 +42,8 @@ public partial class Lab1ViewModel : ObservableRecipient
 
     public async Task SelectFile()
     {
+        IsLoading = true;
+
         var file = await FilePickerHelper.PickSingleFile(".txt", ".8z");
 
         if (file == null) return;
@@ -71,10 +76,14 @@ public partial class Lab1ViewModel : ObservableRecipient
 
         if (file.FileType == ".txt") IsTextSelected = true;
         else IsTextSelected = false;
+
+        IsLoading = false;
     }
 
     public async Task Zip()
     {
+        IsLoading = true;
+
         if (SelectedFile == null) return;
 
         var file = await FilePickerHelper.CreateFile(SelectedFile.DisplayName + $".8z", new Dictionary<string, IList<string>>() { { "8-Zip archive", new List<string>() { ".8z" } } });
@@ -95,10 +104,14 @@ public partial class Lab1ViewModel : ObservableRecipient
 
         ResultRaw = SelectedFile.Name + "\n" + result;
         IsResultDone = true;
+
+        IsLoading = false;
     }
 
     public async Task Unzip()
     {
+        IsLoading = true;
+
         if (SelectedFile == null || SelectedFile.FileType != ".8z") return;
 
         var sourceFileName = "";
@@ -127,6 +140,8 @@ public partial class Lab1ViewModel : ObservableRecipient
 
         ResultRaw = result;
         IsResultDone = true;
+
+        IsLoading = false;
     }
 
     public Lab1ViewModel()
