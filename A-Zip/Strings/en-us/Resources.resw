@@ -175,7 +175,7 @@
     <value>Файл для манипуляций</value>
   </data>
   <data name="UnzipButton.Content" xml:space="preserve">
-    <value>Отменить сжатие</value>
+    <value>Распаковать</value>
   </data>
   <data name="ZipButton.Content" xml:space="preserve">
     <value>Применить сжатие</value>
