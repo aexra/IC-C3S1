@@ -44,27 +44,26 @@ public partial class Lab1ViewModel : ObservableRecipient
     {
         IsLoading = true;
 
-        var file = await FilePickerHelper.PickSingleFile(".txt", ".8z");
+        var file = await FilePickerHelper.PickSingleFile(".txt", ".8z", ".bmp");
 
         if (file == null) return;
 
         SelectedFile = file;
 
-        var stream = new FileStream(file.Path, FileMode.Open, FileAccess.Read, FileShare.None, 4096, true);
-        var reader = new StreamReader(stream);
-
-        SelectedFileRaw = reader.ReadToEnd();
-
-        //ShellPage.Instance.Notify(SelectedFileRaw.Length.ToString());
-
-        reader.Close();
-        stream.Close();
-
-        IsFileSelected = true;
-
         if (file.FileType == ".8z")
         {
+            var stream = new FileStream(file.Path, FileMode.Open, FileAccess.Read, FileShare.None, 4096, true);
+            var reader = new StreamReader(stream);
+
+            SelectedFileRaw = reader.ReadToEnd();
+
+            ShellPage.Instance.Notify(SelectedFileRaw.Length.ToString());
+
+            reader.Close();
+            stream.Close();
+
             IsZipSelected = true;
+            IsTextSelected = false;
 
             // FILL SAVED PARAMETERS
             var lzss = SelectedFileRaw.Split("%s").Last().Split(";");
@@ -72,11 +71,16 @@ public partial class Lab1ViewModel : ObservableRecipient
             WindowSize = lzss[0];
             BufferSize = lzss[1];
         }
-        else IsZipSelected = false;
+        else
+        {
+            var bytes = await file.ReadBytesAsync();
+            SelectedFileRaw = Convert.ToBase64String(bytes);
 
-        if (file.FileType == ".txt") IsTextSelected = true;
-        else IsTextSelected = false;
+            IsZipSelected = false;
+            IsTextSelected = true;
+        }
 
+        IsFileSelected = true;
         IsLoading = false;
     }
 
@@ -128,15 +132,22 @@ public partial class Lab1ViewModel : ObservableRecipient
 
         if (file == null) return;
 
-        var stream = new FileStream(file.Path, FileMode.Open, FileAccess.Write, FileShare.None, 4096, true);
-        var writer = new StreamWriter(stream);
+
+
+        //var stream = new FileStream(file.Path, FileMode.Open, FileAccess.Write, FileShare.None, 4096, true);
+        //var writer = new StreamWriter(stream);
 
         var result = Unzipper(SelectedFileRaw[(sourceFileName.Length + 1)..]);
 
-        writer.Write(result);
+        //writer.Write(result);
 
-        writer.Close();
-        stream.Close();
+        //writer.Close();
+        //stream.Close();
+
+        var bytes = Convert.FromBase64String(result);
+
+        File.WriteAllBytes(file.Path, bytes);
+        
 
         ResultRaw = result;
         IsResultDone = true;
