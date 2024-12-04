@@ -2,6 +2,7 @@
 using A_Zip.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Windows.Storage;
+using Windows.UI.StartScreen;
 
 namespace A_Zip.ViewModels;
 
@@ -144,15 +145,64 @@ public partial class Lab1ViewModel : ObservableRecipient
         //writer.Close();
         //stream.Close();
 
-        var bytes = Convert.FromBase64String(result);
+        var bytes = SafeConvertToByteArray(result);
+
+        if (sourceFileName.Split(".")[^1][..^1] == "bmp")
+            bytes = ValidateBmp(bytes);
 
         File.WriteAllBytes(file.Path, bytes);
         
-
         ResultRaw = result;
         IsResultDone = true;
 
         IsLoading = false;
+    }
+
+    public static byte[] SafeConvertToByteArray(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return Array.Empty<byte>(); // Возвращаем пустой массив, если строка пуста
+
+        input = input.Trim(); // Убираем лишние пробелы
+
+        // Попробуем обработать строку, уменьшая ее до последнего корректного символа
+        while (input.Length > 0)
+        {
+            try
+            {
+                return Convert.FromBase64String(input);
+            }
+            catch (FormatException)
+            {
+                // Если строка невалидна, обрезаем 1 символ и пробуем снова
+                input = input.Substring(0, input.Length - 1);
+            }
+        }
+
+        // Если ничего не удалось преобразовать, возвращаем пустой массив
+        return Array.Empty<byte>();
+    }
+
+    public static byte[] ValidateBmp(byte[] bmpData)
+    {
+        // Проверяем, чтобы массив не был пустым и имел минимум 54 байта (стандартный заголовок BMP)
+        if (bmpData == null || bmpData.Length < 54)
+            throw new ArgumentException("Недопустимый файл BMP: слишком маленький размер.");
+
+        // Получаем ожидаемый размер файла из заголовка BMP (4 байта, начиная с 2-го индекса)
+        var fileSize = BitConverter.ToInt32(bmpData, 2);
+
+        // Если фактический размер меньше указанного в заголовке, добавляем недостающие байты
+        if (bmpData.Length < fileSize)
+        {
+            var fixedData = new byte[fileSize];
+            Array.Copy(bmpData, fixedData, bmpData.Length); // Копируем существующие данные
+            // Остальные байты автоматически инициализируются нулями
+            return fixedData;
+        }
+
+        // Если размер совпадает или превышает указанный, возвращаем исходный массив
+        return bmpData;
     }
 
     public Lab1ViewModel()
